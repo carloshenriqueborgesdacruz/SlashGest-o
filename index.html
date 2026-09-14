@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SlashGestão - dashboard web de gestão com acessibilidade, login, níveis de acesso e CRUD.">
+  <title>SlashGestão | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <section id="loginView" class="login-screen" aria-labelledby="loginTitle">
+    <div class="login-card">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <p class="eyebrow">SLASH SYSTEMS</p>
+      <h1 id="loginTitle">SlashGestão</h1>
+      <p class="muted">Acesse o painel de gestão</p>
+      <form id="loginForm">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button class="primary-button" type="submit">Entrar</button>
+        <p id="loginMessage" class="form-message" role="alert"></p>
+      </form>
+      <p class="demo-access">Demonstração: admin@slash.com / 123456</p>
+    </div>
+  </section>
+
+  <div id="appView" class="app hidden">
+    <aside class="sidebar" id="sidebar" aria-label="Menu principal">
+      <div class="sidebar-header">
+        <div class="brand-mark small" aria-hidden="true">S</div>
+        <div>
+          <strong>SlashGestão</strong>
+          <span>Web App</span>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-button active" data-section="dashboard">Dashboard</button>
+        <button class="nav-button" data-section="records">Registros</button>
+        <button class="nav-button" data-section="users">Usuários</button>
+        <button class="nav-button" data-section="settings">Configurações</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutButton" class="logout-button">Sair</button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <button id="menuButton" class="icon-button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+        <div>
+          <p class="eyebrow">PROJETO PRÁTICO WEB FRONT-END</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="profile">
+          <span id="currentUserName">Administrador</span>
+          <span id="currentUserRole" class="role-badge">Admin</span>
+        </div>
+      </header>
+
+      <main id="conteudo" tabindex="-1">
+        <section id="dashboardSection" class="content-section" aria-labelledby="dashboardHeading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">VISÃO GERAL</p>
+              <h1 id="dashboardHeading">Painel de controle</h1>
+            </div>
+            <button id="newRecordFromDashboard" class="primary-button">+ Novo registro</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span>Total de registros</span>
+              <strong id="totalRecords">0</strong>
+              <small>Dados cadastrados</small>
+            </article>
+            <article class="stat-card">
+              <span>Em andamento</span>
+              <strong id="activeRecords">0</strong>
+              <small>Registros ativos</small>
+            </article>
+            <article class="stat-card">
+              <span>Concluídos</span>
+              <strong id="completedRecords">0</strong>
+              <small>Finalizados</small>
+            </article>
+            <article class="stat-card alert-card">
+              <span>Alertas</span>
+              <strong id="alertCount">0</strong>
+              <small id="alertText">Verifique os prazos</small>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel">
+              <div class="panel-heading">
+                <h2>Status dos registros</h2>
+                <span>Visão atual</span>
+              </div>
+              <canvas id="statusChart" aria-label="Gráfico de status dos registros" role="img"></canvas>
+            </article>
+            <article class="panel">
+              <div class="panel-heading">
+                <h2>Alertas recentes</h2>
+                <span>Prioridade</span>
+              </div>
+              <div id="alertsList" class="alerts-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="recordsSection" class="content-section hidden" aria-labelledby="recordsHeading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">C.R.U.D.</p>
+              <h1 id="recordsHeading">Registros</h1>
+            </div>
+            <button id="newRecordButton" class="primary-button">+ Adicionar</button>
+          </div>
+          <div class="panel">
+            <div class="toolbar">
+              <label class="search-box" for="searchInput">Pesquisar
+                <input id="searchInput" type="search" placeholder="Nome, setor ou status">
+              </label>
+              <label for="statusFilter">Status
+                <select id="statusFilter">
+                  <option value="todos">Todos</option>
+                  <option value="Em andamento">Em andamento</option>
+                  <option value="Concluído">Concluído</option>
+                  <option value="Pendente">Pendente</option>
+                </select>
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <caption class="sr-only">Lista de registros</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Setor</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Prazo</th>
+                    <th scope="col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="recordsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="usersSection" class="content-section hidden" aria-labelledby="usersHeading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">CONTROLE DE NÍVEIS</p>
+              <h1 id="usersHeading">Usuários e permissões</h1>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="permission-grid">
+              <article>
+                <h2>Administrador</h2>
+                <p>Criar, visualizar, atualizar, excluir registros e gerenciar usuários.</p>
+              </article>
+              <article>
+                <h2>Editor</h2>
+                <p>Visualizar, criar e atualizar registros.</p>
+              </article>
+              <article>
+                <h2>Visualizador</h2>
+                <p>Somente visualizar dashboard e registros.</p>
+              </article>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <caption class="sr-only">Usuários do sistema</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Usuário</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Nível</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Administrador</td><td>admin@slash.com</td><td><span class="role-badge">Admin</span></td></tr>
+                  <tr><td>Editor</td><td>editor@slash.com</td><td><span class="role-badge">Editor</span></td></tr>
+                  <tr><td>Visualizador</td><td>viewer@slash.com</td><td><span class="role-badge">Visualizador</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="settingsSection" class="content-section hidden" aria-labelledby="settingsHeading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">ACESSIBILIDADE</p>
+              <h1 id="settingsHeading">Configurações</h1>
+            </div>
+          </div>
+          <div class="panel settings-panel">
+            <label class="switch-row">
+              <span>Alto contraste</span>
+              <input id="contrastToggle" type="checkbox">
+            </label>
+            <label class="switch-row">
+              <span>Aumentar tamanho do texto</span>
+              <input id="fontToggle" type="checkbox">
+            </label>
+            <label class="switch-row">
+              <span>Reduzir animações</span>
+              <input id="motionToggle" type="checkbox">
+            </label>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="recordDialog">
+    <form id="recordForm" method="dialog" class="modal-card">
+      <div class="modal-heading">
+        <div>
+          <p class="eyebrow">C.R.U.D.</p>
+          <h2 id="modalTitle">Novo registro</h2>
+        </div>
+        <button id="closeDialog" class="icon-button" type="button" aria-label="Fechar">×</button>
+      </div>
+      <input id="recordId" type="hidden">
+      <label for="recordName">Nome</label>
+      <input id="recordName" required maxlength="80">
+      <label for="recordSector">Setor</label>
+      <input id="recordSector" required maxlength="60">
+      <label for="recordStatus">Status</label>
+      <select id="recordStatus" required>
+        <option>Em andamento</option>
+        <option>Concluído</option>
+        <option>Pendente</option>
+      </select>
+      <label for="recordDeadline">Prazo</label>
+      <input id="recordDeadline" type="date" required>
+      <div class="modal-actions">
+        <button id="cancelDialog" class="secondary-button" type="button">Cancelar</button>
+        <button class="primary-button" type="submit">Salvar</button>
+      </div>
+      <p id="formMessage" class="form-message" role="alert"></p>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
