@@ -3,254 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SlashGestão - dashboard web de gestão com acessibilidade, login, níveis de acesso e CRUD.">
+  <meta name="description" content="SlashGestão - Web App de Gestão com dashboard, CRUD, acessibilidade e controle de níveis.">
   <title>SlashGestão | Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-
-  <section id="loginView" class="login-screen" aria-labelledby="loginTitle">
+  <div id="loginScreen" class="login-screen">
     <div class="login-card">
-      <div class="brand-mark" aria-hidden="true">S</div>
-      <p class="eyebrow">SLASH SYSTEMS</p>
-      <h1 id="loginTitle">SlashGestão</h1>
-      <p class="muted">Acesse o painel de gestão</p>
-      <form id="loginForm">
-        <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" autocomplete="username" required>
+      <div class="brand-mark">/</div>
+      <div>
+        <p class="eyebrow">WEB APP DE GESTÃO</p>
+        <h1>SlashGestão</h1>
+      </div>
+      <p class="login-subtitle">Organize projetos, tarefas e equipe em um só lugar.</p>
+      <form id="loginForm" novalidate>
+        <label for="email">Usuário</label>
+        <input id="email" name="email" type="text" autocomplete="username" required placeholder="admin">
         <label for="password">Senha</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
-        <button class="primary-button" type="submit">Entrar</button>
-        <p id="loginMessage" class="form-message" role="alert"></p>
+        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="admin123">
+        <button class="primary-btn full" type="submit">Entrar</button>
+        <p class="demo-info"><strong>Demo:</strong> admin / admin123 ou usuario / user123</p>
+        <p id="loginError" class="error" role="alert" aria-live="polite"></p>
       </form>
-      <p class="demo-access">Demonstração: admin@slash.com / 123456</p>
-    </div>
-  </section>
-
-  <div id="appView" class="app hidden">
-    <aside class="sidebar" id="sidebar" aria-label="Menu principal">
-      <div class="sidebar-header">
-        <div class="brand-mark small" aria-hidden="true">S</div>
-        <div>
-          <strong>SlashGestão</strong>
-          <span>Web App</span>
-        </div>
-      </div>
-      <nav>
-        <button class="nav-button active" data-section="dashboard">Dashboard</button>
-        <button class="nav-button" data-section="records">Registros</button>
-        <button class="nav-button" data-section="users">Usuários</button>
-        <button class="nav-button" data-section="settings">Configurações</button>
-      </nav>
-      <div class="sidebar-footer">
-        <button id="logoutButton" class="logout-button">Sair</button>
-      </div>
-    </aside>
-
-    <div class="main-area">
-      <header class="topbar">
-        <button id="menuButton" class="icon-button" aria-label="Abrir menu" aria-expanded="false">☰</button>
-        <div>
-          <p class="eyebrow">PROJETO PRÁTICO WEB FRONT-END</p>
-          <h2 id="pageTitle">Dashboard</h2>
-        </div>
-        <div class="profile">
-          <span id="currentUserName">Administrador</span>
-          <span id="currentUserRole" class="role-badge">Admin</span>
-        </div>
-      </header>
-
-      <main id="conteudo" tabindex="-1">
-        <section id="dashboardSection" class="content-section" aria-labelledby="dashboardHeading">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">VISÃO GERAL</p>
-              <h1 id="dashboardHeading">Painel de controle</h1>
-            </div>
-            <button id="newRecordFromDashboard" class="primary-button">+ Novo registro</button>
-          </div>
-
-          <div class="stats-grid">
-            <article class="stat-card">
-              <span>Total de registros</span>
-              <strong id="totalRecords">0</strong>
-              <small>Dados cadastrados</small>
-            </article>
-            <article class="stat-card">
-              <span>Em andamento</span>
-              <strong id="activeRecords">0</strong>
-              <small>Registros ativos</small>
-            </article>
-            <article class="stat-card">
-              <span>Concluídos</span>
-              <strong id="completedRecords">0</strong>
-              <small>Finalizados</small>
-            </article>
-            <article class="stat-card alert-card">
-              <span>Alertas</span>
-              <strong id="alertCount">0</strong>
-              <small id="alertText">Verifique os prazos</small>
-            </article>
-          </div>
-
-          <div class="dashboard-grid">
-            <article class="panel chart-panel">
-              <div class="panel-heading">
-                <h2>Status dos registros</h2>
-                <span>Visão atual</span>
-              </div>
-              <canvas id="statusChart" aria-label="Gráfico de status dos registros" role="img"></canvas>
-            </article>
-            <article class="panel">
-              <div class="panel-heading">
-                <h2>Alertas recentes</h2>
-                <span>Prioridade</span>
-              </div>
-              <div id="alertsList" class="alerts-list"></div>
-            </article>
-          </div>
-        </section>
-
-        <section id="recordsSection" class="content-section hidden" aria-labelledby="recordsHeading">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">C.R.U.D.</p>
-              <h1 id="recordsHeading">Registros</h1>
-            </div>
-            <button id="newRecordButton" class="primary-button">+ Adicionar</button>
-          </div>
-          <div class="panel">
-            <div class="toolbar">
-              <label class="search-box" for="searchInput">Pesquisar
-                <input id="searchInput" type="search" placeholder="Nome, setor ou status">
-              </label>
-              <label for="statusFilter">Status
-                <select id="statusFilter">
-                  <option value="todos">Todos</option>
-                  <option value="Em andamento">Em andamento</option>
-                  <option value="Concluído">Concluído</option>
-                  <option value="Pendente">Pendente</option>
-                </select>
-              </label>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <caption class="sr-only">Lista de registros</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Setor</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Prazo</th>
-                    <th scope="col">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="recordsTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="usersSection" class="content-section hidden" aria-labelledby="usersHeading">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">CONTROLE DE NÍVEIS</p>
-              <h1 id="usersHeading">Usuários e permissões</h1>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="permission-grid">
-              <article>
-                <h2>Administrador</h2>
-                <p>Criar, visualizar, atualizar, excluir registros e gerenciar usuários.</p>
-              </article>
-              <article>
-                <h2>Editor</h2>
-                <p>Visualizar, criar e atualizar registros.</p>
-              </article>
-              <article>
-                <h2>Visualizador</h2>
-                <p>Somente visualizar dashboard e registros.</p>
-              </article>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <caption class="sr-only">Usuários do sistema</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Usuário</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Nível</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Administrador</td><td>admin@slash.com</td><td><span class="role-badge">Admin</span></td></tr>
-                  <tr><td>Editor</td><td>editor@slash.com</td><td><span class="role-badge">Editor</span></td></tr>
-                  <tr><td>Visualizador</td><td>viewer@slash.com</td><td><span class="role-badge">Visualizador</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section id="settingsSection" class="content-section hidden" aria-labelledby="settingsHeading">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">ACESSIBILIDADE</p>
-              <h1 id="settingsHeading">Configurações</h1>
-            </div>
-          </div>
-          <div class="panel settings-panel">
-            <label class="switch-row">
-              <span>Alto contraste</span>
-              <input id="contrastToggle" type="checkbox">
-            </label>
-            <label class="switch-row">
-              <span>Aumentar tamanho do texto</span>
-              <input id="fontToggle" type="checkbox">
-            </label>
-            <label class="switch-row">
-              <span>Reduzir animações</span>
-              <input id="motionToggle" type="checkbox">
-            </label>
-          </div>
-        </section>
-      </main>
     </div>
   </div>
 
-  <dialog id="recordDialog">
-    <form id="recordForm" method="dialog" class="modal-card">
-      <div class="modal-heading">
+  <div id="app" class="app hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="logo"><span>/</span> SlashGestão</div>
+        <button class="icon-btn mobile-only" id="closeSidebar" aria-label="Fechar menu">×</button>
+      </div>
+      <div class="profile-mini">
+        <div class="avatar" id="avatarLetter">C</div>
         <div>
-          <p class="eyebrow">C.R.U.D.</p>
-          <h2 id="modalTitle">Novo registro</h2>
+          <strong id="userName">Carlos</strong>
+          <small id="userRole">Administrador</small>
         </div>
-        <button id="closeDialog" class="icon-button" type="button" aria-label="Fechar">×</button>
       </div>
-      <input id="recordId" type="hidden">
-      <label for="recordName">Nome</label>
-      <input id="recordName" required maxlength="80">
-      <label for="recordSector">Setor</label>
-      <input id="recordSector" required maxlength="60">
-      <label for="recordStatus">Status</label>
-      <select id="recordStatus" required>
-        <option>Em andamento</option>
-        <option>Concluído</option>
-        <option>Pendente</option>
-      </select>
-      <label for="recordDeadline">Prazo</label>
-      <input id="recordDeadline" type="date" required>
-      <div class="modal-actions">
-        <button id="cancelDialog" class="secondary-button" type="button">Cancelar</button>
-        <button class="primary-button" type="submit">Salvar</button>
+      <nav aria-label="Navegação principal">
+        <button class="nav-item active" data-section="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-item" data-section="tasks"><span>✓</span> Tarefas</button>
+        <button class="nav-item" data-section="projects"><span>▣</span> Projetos</button>
+        <button class="nav-item" data-section="team"><span>♙</span> Equipe</button>
+        <button class="nav-item" data-section="documentation"><span>?</span> Documentação</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" id="toggleContrast"><span>◐</span> Alto contraste</button>
+        <button class="nav-item" id="logoutBtn"><span>↪</span> Sair</button>
       </div>
-      <p id="formMessage" class="form-message" role="alert"></p>
+    </aside>
+
+    <div class="overlay hidden" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <div>
+          <p class="eyebrow">VISÃO GERAL</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="notificationsBtn" aria-label="Ver alertas">🔔<span class="notification-dot"></span></button>
+          <div class="user-chip"><div class="avatar small" id="topAvatar">C</div><span id="topName">Carlos</span></div>
+        </div>
+      </header>
+
+      <section id="dashboardSection" class="section">
+        <div class="welcome">
+          <div>
+            <h3>Olá, <span id="welcomeName">Carlos</span> 👋</h3>
+            <p>Acompanhe o andamento do seu trabalho.</p>
+          </div>
+          <button class="primary-btn" id="quickAddBtn">+ Nova tarefa</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon blue">✓</div><div><span>Tarefas totais</span><strong id="statTotal">0</strong><small> cadastradas</small></div></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div><span>Concluídas</span><strong id="statDone">0</strong><small id="donePercent">0%</small></div></article>
+          <article class="stat-card"><div class="stat-icon orange">!</div><div><span>Pendentes</span><strong id="statPending">0</strong><small> precisam de atenção</small></div></article>
+          <article class="stat-card"><div class="stat-icon purple">▣</div><div><span>Projetos ativos</span><strong id="statProjects">0</strong><small> em andamento</small></div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head"><div><h3>Progresso das tarefas</h3><p>Distribuição por status</p></div></div>
+            <div class="chart-area">
+              <div class="donut" id="donutChart"><div><strong id="donutPercent">0%</strong><span>concluído</span></div></div>
+              <div class="legend">
+                <div><i class="dot done"></i> Concluídas <strong id="legendDone">0</strong></div>
+                <div><i class="dot progress"></i> Em andamento <strong id="legendProgress">0</strong></div>
+                <div><i class="dot pending"></i> Pendentes <strong id="legendPending">0</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head"><div><h3>Atividade semanal</h3><p>Tarefas por dia</p></div></div>
+            <div class="bars" id="weeklyChart"></div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid lower">
+          <article class="panel">
+            <div class="panel-head"><div><h3>Alertas</h3><p>Itens que precisam de atenção</p></div></div>
+            <div id="alertsList" class="alerts-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><h3>Atividade recente</h3><p>Últimas tarefas cadastradas</p></div></div>
+            <div id="recentList" class="recent-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tasksSection" class="section hidden">
+        <div class="section-heading"><div><p class="eyebrow">GERENCIAMENTO</p><h3>Tarefas</h3><p>Crie, visualize, atualize e exclua registros.</p></div><button class="primary-btn can-edit" id="newTaskBtn">+ Nova tarefa</button></div>
+        <div class="toolbar"><input id="taskSearch" type="search" placeholder="🔎 Buscar tarefa..." aria-label="Buscar tarefa"><select id="statusFilter" aria-label="Filtrar por status"><option value="all">Todos os status</option><option value="Pendente">Pendente</option><option value="Em andamento">Em andamento</option><option value="Concluída">Concluída</option></select></div>
+        <div class="table-wrap"><table><thead><tr><th>Tarefa</th><th>Responsável</th><th>Prazo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tasksTable"></tbody></table></div>
+      </section>
+
+      <section id="projectsSection" class="section hidden">
+        <div class="section-heading"><div><p class="eyebrow">GERENCIAMENTO</p><h3>Projetos</h3><p>Visão dos projetos cadastrados.</p></div><button class="primary-btn can-edit" id="newProjectBtn">+ Novo projeto</button></div>
+        <div id="projectCards" class="project-grid"></div>
+      </section>
+
+      <section id="teamSection" class="section hidden">
+        <div class="section-heading"><div><p class="eyebrow">ACESSOS</p><h3>Equipe e níveis</h3><p>Controle de permissões por função.</p></div></div>
+        <div class="roles-grid">
+          <article class="role-card"><div class="role-badge admin">A</div><h4>Administrador</h4><p>Acesso completo ao sistema, incluindo criação, edição e exclusão.</p><span>CRUD completo</span></article>
+          <article class="role-card"><div class="role-badge editor">E</div><h4>Editor</h4><p>Pode visualizar, criar e atualizar registros, mas não excluir.</p><span>Criar + Ler + Atualizar</span></article>
+          <article class="role-card"><div class="role-badge viewer">V</div><h4>Visualizador</h4><p>Acesso somente para consultar informações e acompanhar o dashboard.</p><span>Somente leitura</span></article>
+        </div>
+        <div class="panel permission-panel"><h3>Usuário atual</h3><div class="permission-row"><span id="currentUserText">Carlos — Administrador</span><span class="status-badge done">Acesso autorizado</span></div></div>
+      </section>
+
+      <section id="documentationSection" class="section hidden">
+        <div class="section-heading"><div><p class="eyebrow">PROJETO</p><h3>Documentação</h3><p>Especificação resumida do SlashGestão.</p></div></div>
+        <div class="docs">
+          <article class="panel"><h3>Objetivo</h3><p>O SlashGestão é um Web App de Gestão inspirado em dashboards modernos, com foco em organização de tarefas, projetos, indicadores e permissões de usuários.</p></article>
+          <article class="panel"><h3>Requisitos atendidos</h3><ul class="check-list"><li>Acessibilidade com HTML semântico, labels, foco visível, navegação por teclado e alto contraste.</li><li>Login com validação, sessão e níveis de acesso no protótipo.</li><li>Dashboard com estatísticas, gráfico de progresso, atividade semanal e alertas.</li><li>CRUD de tarefas e projetos usando armazenamento local do navegador.</li><li>Menu lateral responsivo e navegação clara.</li><li>Níveis Administrador, Editor e Visualizador.</li><li>Layout responsivo para celular, tablet e computador.</li></ul></article>
+          <article class="panel warning"><h3>Importante sobre segurança</h3><p>Este projeto é um protótipo front-end. Um login realmente seguro não deve guardar senhas no JavaScript ou localStorage. Para produção, utilize backend, HTTPS, hash de senhas, sessões/tokens seguros, autorização no servidor e banco de dados.</p></article>
+          <article class="panel"><h3>Hospedagem</h3><p>O projeto pode ser publicado gratuitamente no GitHub Pages, pois utiliza apenas HTML, CSS e JavaScript. Coloque os arquivos no repositório, ative Pages em <strong>Settings → Pages</strong> e selecione a branch principal.</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="modal">
+    <form method="dialog" id="taskForm" class="modal-card">
+      <div class="modal-head"><h3 id="taskDialogTitle">Nova tarefa</h3><button type="button" class="icon-btn" data-close="taskDialog" aria-label="Fechar">×</button></div>
+      <input type="hidden" id="taskId">
+      <label for="taskTitle">Título</label><input id="taskTitle" required maxlength="80">
+      <label for="taskOwner">Responsável</label><input id="taskOwner" required maxlength="50">
+      <label for="taskDue">Prazo</label><input id="taskDue" type="date" required>
+      <label for="taskStatus">Status</label><select id="taskStatus"><option>Pendente</option><option>Em andamento</option><option>Concluída</option></select>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close="taskDialog">Cancelar</button><button type="submit" class="primary-btn">Salvar</button></div>
     </form>
   </dialog>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <dialog id="projectDialog" class="modal">
+    <form method="dialog" id="projectForm" class="modal-card">
+      <div class="modal-head"><h3>Novo projeto</h3><button type="button" class="icon-btn" data-close="projectDialog" aria-label="Fechar">×</button></div>
+      <label for="projectName">Nome</label><input id="projectName" required maxlength="60">
+      <label for="projectClient">Cliente / área</label><input id="projectClient" required maxlength="60">
+      <label for="projectProgress">Progresso (%)</label><input id="projectProgress" type="number" min="0" max="100" value="10" required>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close="projectDialog">Cancelar</button><button type="submit" class="primary-btn">Criar</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
 </html>
